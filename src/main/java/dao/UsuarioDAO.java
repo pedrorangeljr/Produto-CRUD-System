@@ -1,7 +1,10 @@
 package dao;
 
+import org.mindrot.jbcrypt.BCrypt;
+
 import config.JPAUtil;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.NoResultException;
 import model.Usuario;
 
 public class UsuarioDAO {
@@ -29,5 +32,37 @@ public class UsuarioDAO {
 
 			em.close();
 		}
+	}
+
+	public Usuario buscarPorEmail(String email) {
+
+		EntityManager em = JPAUtil.getEntityManager();
+
+		try {
+
+			return em.createQuery("Select u FROM Usuario u WHERE u.email = :email AND u.ativo = true", Usuario.class)
+					.setParameter("email", email).getSingleResult();
+
+		} catch (NoResultException e) {
+
+			return null;
+
+		} finally {
+
+			em.close();
+		}
+	}
+
+	public boolean autenticar(String email, String senhaPlain) {
+
+		Usuario usuario = buscarPorEmail(email);
+		if (usuario == null)
+			return false;
+		return BCrypt.checkpw(senhaPlain, usuario.getSenhaHash());
+	}
+
+	public static String hashSenha(String senhaPlain) {
+
+		return BCrypt.hashpw(senhaPlain, BCrypt.gensalt(12));
 	}
 }
