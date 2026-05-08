@@ -57,4 +57,56 @@ public class ProdutoDAO {
 			em.close();
 		}
 	}
+
+	public Produto buscarPorId(Long id, Usuario usuario) {
+
+		EntityManager em = JPAUtil.getEntityManager();
+
+		try {
+
+			return em.createQuery("SELECT p FROM Produto P WHERE p.id = :id AND p.usuario = :usuario", Produto.class)
+					.setParameter("id", id).setParameter("Usuario", usuario).getSingleResult();
+
+		} catch (Exception e) {
+
+			return null;
+
+		} finally {
+
+			em.close();
+		}
+	}
+
+	public void excluir(Long id, Usuario usuario) {
+
+		EntityManager em = JPAUtil.getEntityManager();
+
+		try {
+
+			em.getTransaction().begin();
+
+			Produto produto = buscarPorId(id, usuario);
+
+			if (produto != null) {
+
+				em.remove(em.contains(produto) ? produto : em.merge(produto));
+			}
+
+			em.getTransaction().commit();
+
+		} catch (Exception e) {
+
+			if (em.getTransaction().isActive()) {
+
+				em.getTransaction().rollback();
+			}
+			
+            throw new RuntimeException("Erro ao excluir produto", e);
+            
+		}finally {
+			
+			em.close();
+		}
+	}
+
 }
