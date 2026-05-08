@@ -10,7 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import dao.ProdutoDAO;
-import jakarta.servlet.http.HttpSession;
+import javax.servlet.http.HttpSession;
 import model.Produto;
 import model.Usuario;
 
