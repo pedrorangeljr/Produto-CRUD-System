@@ -9,9 +9,12 @@ import model.Produto;
 import model.Usuario;
 
 public class ProdutoDAO {
-    
+	
+	
     public void salvar(Produto produto) {
-        EntityManager em = JPAUtil.getEntityManager();
+    	
+    	EntityManager em = JPAUtil.getEntityManager();
+    	
         try {
             em.getTransaction().begin();
             if (produto.getId() == null) {

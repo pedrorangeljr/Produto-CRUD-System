@@ -10,34 +10,25 @@ public class JPAUtil {
 	private static volatile EntityManagerFactory emf;
 
 	static {
-
 		try {
-
 			emf = Persistence.createEntityManagerFactory(PERSISTENCE_UNIT_NAME);
-
 		} catch (Exception e) {
-
 			throw new RuntimeException("Falha ao inicializar JPA", e);
 		}
 	}
 
-	public JPAUtil() {
-	}
+	private JPAUtil() {
+	} // Construtor privado (utility class)
 
 	public static EntityManager getEntityManager() {
-
 		if (emf == null) {
-
 			throw new IllegalStateException("JPA não inicializado");
 		}
-
 		return emf.createEntityManager();
 	}
 
 	public static void close() {
-
 		if (emf != null && emf.isOpen()) {
-
 			emf.close();
 		}
 	}

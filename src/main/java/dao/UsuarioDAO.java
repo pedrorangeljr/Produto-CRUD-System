@@ -9,11 +9,12 @@ import config.JPAUtil;
 import model.Usuario;
 
 public class UsuarioDAO {
+	
 
 	public void salvar(Usuario usuario) {
 
 		EntityManager em = JPAUtil.getEntityManager();
-
+		
 		try {
 
 			em.getTransaction().begin();
